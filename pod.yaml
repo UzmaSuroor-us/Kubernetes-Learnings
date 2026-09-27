@@ -1,0 +1,112 @@
+#A Pod is the smallest deployable unit in Kubernetes.
+#Think of a Pod as a wrapper around one or more containers that run together on the same machine.
+#Example:if you run docker container(nginx),that Nginx container runs inside a Pod.
+#What does a Pod provide?
+#All containers inside a Pod share:Same IP address,Same network namespace, Same storage volumes, Same lifecycle
+#containers can communicate using localhost.
+#Benefits:
+#Container grouping
+#Shared networking
+#Shared storage
+#Easy scaling and management
+#
+#
+#
+apiVersion: v1                     # Kubernetes API version
+kind: Pod                          # Resource type
+
+metadata:
+  name: <pod-name>                 # Unique Pod name
+  namespace: <namespace>           # Namespace where Pod runs
+  labels:                          # Key-value identifiers
+    <key>: <value>
+  annotations:                     # Additional metadata
+    <key>: <value>
+
+spec:
+  restartPolicy: Always            # Restart behavior (Always/OnFailure/Never)
+
+  serviceAccountName: <sa-name>    # Service account for API access
+
+  nodeSelector:                    # Schedule Pod on matching nodes
+    <key>: <value>
+
+  tolerations:                     # Allow Pod on tainted nodes
+    - key: <taint-key>
+
+  affinity: {}                     # Advanced scheduling rules
+
+  imagePullSecrets:                # Secret for private image registry
+    - name: <secret-name>
+
+  initContainers:                  # Runs before main containers
+    - name: <init-container-name>
+      image: <image>
+
+  containers:
+    - name: <container-name>       # Container name
+      image: <image>:<tag>         # Container image
+
+      imagePullPolicy: IfNotPresent # Image pull behavior
+
+      command:                     # Override default entrypoint
+        - <command>
+
+      args:                        # Arguments for command
+        - <arg>
+
+      ports:
+        - containerPort: <port>    # Container listening port
+          protocol: TCP            # TCP or UDP
+
+      env:                         # Environment variables
+        - name: <env-name>
+          value: <env-value>
+
+      envFrom:                     # Import ConfigMap/Secret variables
+        - configMapRef:
+            name: <configmap>
+
+      resources:
+        requests:                  # Minimum guaranteed resources
+          cpu: <cpu>
+          memory: <memory>
+        limits:                    # Maximum allowed resources
+          cpu: <cpu>
+          memory: <memory>
+
+      volumeMounts:
+        - name: <volume-name>      # Volume reference
+          mountPath: <path>        # Mount location inside container
+
+      livenessProbe:               # Checks if container is healthy
+        {}
+
+      readinessProbe:              # Checks if container can receive traffic
+        {}
+
+      startupProbe:                # Checks startup completion
+        {}
+
+      securityContext:             # Container-level security settings
+        {}
+
+  volumes:
+    - name: <volume-name>          # Volume name
+      emptyDir: {}                 # Temporary storage example
+
+  securityContext: {}              # Pod-level security settings
+
+  hostNetwork: false               # Use node network if true
+  dnsPolicy: ClusterFirst          # DNS behavior
+
+  terminationGracePeriodSeconds: 30 # Time before force shutdown
+#
+#
+#Commands:
+#kubectl apply -f pod.yaml
+#kubectl get pods
+#kubectl describe pod <pod-name>
+#kubectl logs <pod-name>
+#kubectl exec -it <pod-name> -- sh
+#kubectl delete pod <pod-name>
