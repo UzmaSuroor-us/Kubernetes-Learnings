@@ -1,0 +1,54 @@
+#ReplicaSet is a Kubernetes controller that maintains the desired number of Pod replicas by continuously monitoring Pods and creating or removing them as needed. It uses label selectors to identify the Pods it manages. Deployments use ReplicaSets internally to provide scaling, self-healing, rolling updates, and rollbacks.
+#
+#
+#
+apiVersion: apps/v1                 # ReplicaSet API version
+kind: ReplicaSet                    # Resource type
+
+metadata:
+  name: <replicaset-name>           # ReplicaSet name
+  namespace: <namespace>            # Namespace
+
+spec:
+  replicas: <number>                # Desired number of Pods
+
+  selector:
+    matchLabels:                    # Labels used to identify Pods
+      <key>: <value>
+
+  template:                         # Pod template
+
+    metadata:
+      labels:                       # Must match selector labels
+        <key>: <value>
+
+    spec:
+      containers:
+        - name: <container-name>    # Container name
+          image: <image>:<tag>      # Container image
+
+          ports:
+            - containerPort: <port>
+
+          env:
+            - name: <env-name>
+              value: <env-value>
+
+          resources:
+            requests:
+              cpu: <cpu>
+              memory: <memory>
+
+            limits:
+              cpu: <cpu>
+              memory: <memory>
+#
+#
+#
+#kubectl apply -f replicaset.yaml
+#kubectl get rs
+#kubectl describe rs <replicaset-name>
+#kubectl scale rs <replicaset-name> --replicas=3
+#kubectl get pods
+#kubectl delete pod <pod-name>
+#kubectl delete rs <replicaset-name>
