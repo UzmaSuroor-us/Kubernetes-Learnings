@@ -1,4 +1,14 @@
-#A Service is a Kubernetes networking resource that provides a stable IP address and DNS name for accessing one or more Pods and load-balances traffic across those Pods.
+#A Service provides a stable network endpoint for accessing Pods.
+#Pods can be created, deleted, and recreated at any time, so their IP addresses change.
+#A Service solves this by providing:
+#Stable IP address
+#Stable DNS name
+#Load balancing across Pods
+#Communication between applications
+#Instead of connecting directly to Pods, clients connect to the Service.
+#ClusterIP (Default):Used for communication between applications inside Kubernetes.
+#NodePort: Exposes application outside the cluster.
+#LoadBalancer: Used in cloud providers (AWS, Azure, GCP).
 #
 #
 #
