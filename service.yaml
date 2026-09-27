@@ -1,0 +1,39 @@
+#A Service is a Kubernetes networking resource that provides a stable IP address and DNS name for accessing one or more Pods and load-balances traffic across those Pods.
+#
+#
+#
+apiVersion: v1                    # Service API version
+kind: Service                     # Resource type
+
+metadata:
+  name: <service-name>            # Service name
+  namespace: <namespace>          # Namespace
+  labels:                         # Service labels
+    <key>: <value>
+
+spec:
+  type: ClusterIP                 # ClusterIP / NodePort / LoadBalancer / ExternalName
+
+  selector:                       # Finds matching Pods
+    <key>: <value>
+
+  ports:
+    - name: <port-name>           # Port identifier
+
+      protocol: TCP               # TCP or UDP
+
+      port: <service-port>        # Port exposed by Service
+
+      targetPort: <container-port> # Port inside Pod
+
+      nodePort: <node-port>       # Only for NodePort type
+
+  externalName: <dns-name>        # Only for ExternalName type
+#
+#
+#
+#kubectl get svc
+#kubectl describe svc <service-name>
+#kubectl get endpoints
+#kubectl get pods --show-labels
+#kubectl describe pod <pod-name>
