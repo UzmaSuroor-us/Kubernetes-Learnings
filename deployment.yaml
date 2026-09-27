@@ -1,0 +1,126 @@
+#Deployment is a higher-level Kubernetes object that manages ReplicaSets and Pods. It provides self-healing, scaling, rolling updates, and rollback capabilities while ensuring the desired number of Pods are always running.
+#
+#
+#
+apiVersion: apps/v1                 # Deployment API version
+kind: Deployment                    # Resource type
+
+metadata:
+  name: <deployment-name>           # Deployment name
+  namespace: <namespace>            # Namespace
+  labels:                           # Deployment labels
+    <key>: <value>
+
+spec:
+  replicas: <number>                # Number of Pod replicas
+
+  revisionHistoryLimit: <number>    # Number of old ReplicaSets to keep
+
+  strategy:                         # Update strategy
+    type: RollingUpdate             # RollingUpdate or Recreate
+
+    rollingUpdate:
+      maxSurge: <number>            # Extra Pods during update
+      maxUnavailable: <number>      # Pods allowed to be unavailable
+
+  selector:                         # Must match template labels
+    matchLabels:
+      <key>: <value>
+
+  template:                         # Pod template
+
+    metadata:
+      labels:                       # Labels for Pods created
+        <key>: <value>
+
+      annotations:                  # Optional Pod annotations
+        <key>: <value>
+
+    spec:
+
+      serviceAccountName: <sa-name> # Service account
+
+      nodeSelector:                 # Node scheduling
+        <key>: <value>
+
+      tolerations:                  # Allow tainted nodes
+        - key: <taint-key>
+
+      affinity: {}                  # Advanced scheduling rules
+
+      imagePullSecrets:             # Private registry secret
+        - name: <secret-name>
+
+      initContainers:               # Runs before main containers
+        - name: <init-container>
+          image: <image>
+
+      containers:
+
+        - name: <container-name>    # Container name
+          image: <image>:<tag>      # Container image
+
+          imagePullPolicy: IfNotPresent # Image pull behavior
+
+          command:                  # Override entrypoint
+            - <command>
+
+          args:                     # Command arguments
+            - <arg>
+
+          ports:
+            - containerPort: <port> # Container port
+              protocol: TCP         # TCP or UDP
+
+          env:                      # Environment variables
+            - name: <env-name>
+              value: <env-value>
+
+          envFrom:                  # Import ConfigMap/Secret vars
+            - configMapRef:
+                name: <configmap>
+
+          resources:
+            requests:               # Minimum resources
+              cpu: <cpu>
+              memory: <memory>
+
+            limits:                 # Maximum resources
+              cpu: <cpu>
+              memory: <memory>
+
+          volumeMounts:
+            - name: <volume-name>   # Volume reference
+              mountPath: <path>     # Mount path
+
+          livenessProbe: {}         # Health check
+
+          readinessProbe: {}        # Traffic readiness check
+
+          startupProbe: {}          # Startup check
+
+          securityContext: {}       # Container security settings
+
+      volumes:
+        - name: <volume-name>       # Volume name
+          emptyDir: {}              # Example volume type
+
+      securityContext: {}           # Pod security settings
+
+      hostNetwork: false            # Use node network if true
+
+      dnsPolicy: ClusterFirst       # DNS policy
+
+      terminationGracePeriodSeconds: 30 # Graceful shutdown time
+#
+#
+#
+#kubectl apply -f deployment.yaml
+#kubectl get deploy
+#kubectl describe deployment <deployment-name>
+#kubectl scale deployment <deployment-name> --replicas=3
+#kubectl rollout status deployment/<deployment-name>
+#kubectl rollout history deployment/<deployment-name>
+#kubectl rollout undo deployment/<deployment-name>
+#kubectl rollout restart deployment/<deployment-name>
+#kubectl delete deployment <deployment-name>
