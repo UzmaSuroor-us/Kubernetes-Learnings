@@ -1,0 +1,25 @@
+#A Namespace is a logical partition inside a Kubernetes cluster used to organize and isolate resources.
+#Why Use Namespaces?
+#Separate environments
+#Separate teams
+#Avoid name conflicts
+#
+#
+#
+apiVersion: v1                # API version
+kind: Namespace               # Resource type
+
+metadata:
+  name: <namespace-name>      # Namespace name
+
+  labels:                     # Labels
+    <key>: <value>
+
+  annotations:                # Extra metadata
+    <key>: <value>
+#
+#
+#
+#kubectl get ns
+#kubectl get all -n <namespace-name>
+#kubectl describe ns <namespace-name>
