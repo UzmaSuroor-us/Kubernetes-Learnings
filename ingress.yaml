@@ -1,0 +1,60 @@
+#An Ingress is a Kubernetes resource that manages external HTTP/HTTPS traffic and routes it to the correct Services inside the cluster.
+#Why Use Ingress?
+#Single entry point for multiple applications
+#Host-based routing
+#Path-based routing
+#SSL/TLS termination
+#Load balancing
+#It requires an Ingress Controller to process and route traffic.
+#
+#
+#
+apiVersion: networking.k8s.io/v1     # Ingress API version
+kind: Ingress                        # Resource type
+
+metadata:
+  name: <ingress-name>               # Ingress name
+
+  annotations:                       # Controller-specific settings
+    <key>: <value>
+
+spec:
+
+  ingressClassName: <class-name>     # Ingress controller name
+
+  tls:                               # HTTPS configuration
+    - hosts:
+        - <hostname>
+
+      secretName: <tls-secret>
+
+  rules:
+
+    - host: <hostname>               # Domain name
+
+      http:
+
+        paths:
+
+          - path: <path>             # URL path
+
+            pathType: Prefix         # Prefix / Exact
+
+            backend:
+
+              service:
+
+                name: <service-name> # Target service
+
+                port:
+
+                  number: <port>     # Service port
+#
+#
+#
+#kubectl get ingress
+#kubectl describe ingress <ingress-name>
+#kubectl get ingressclass
+#kubectl get svc
+#kubectl get pods
+#kubectl logs <ingress-controller-pod>
