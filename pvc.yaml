@@ -1,0 +1,37 @@
+#A PersistentVolumeClaim (PVC) is a request for storage made by an application running in Kubernetes.
+#
+#
+#
+
+apiVersion: v1                    # Kubernetes API version
+kind: PersistentVolumeClaim       # Resource type
+
+metadata:
+  name: <pvc-name>                # Claim name
+  namespace: <namespace>         # Namespace
+
+spec:
+  accessModes:                    # Required access mode
+    - <access-mode>
+
+  resources:
+    requests:
+      storage: <size>             # Requested storage capacity
+
+  storageClassName: <class-name>  # Storage provisioner/class
+
+  volumeMode: Filesystem           # Filesystem or Block
+
+  selector:                       # Optional PV selection criteria
+    matchLabels:
+      <key>: <value>
+#
+#
+#
+#kubectl get pvc
+#kubectl describe pvc <pvc-name>
+#kubectl get pv
+#kubectl get storageclass
+#kubectl get pods
+#kubectl describe pod <pod-name>
+#kubectl get events --sort-by=.metadata.creationTimestamp
