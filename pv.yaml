@@ -1,0 +1,38 @@
+#A PersistentVolume (PV) is a storage resource in a Kubernetes cluster that exists independently of an individual Pod's lifecycle.
+#If a Pod is deleted or recreated, data stored on a properly configured PersistentVolume can remain available.
+#
+#
+#
+
+apiVersion: v1                    # Kubernetes API version
+kind: PersistentVolume            # Resource type
+
+metadata:
+  name: <pv-name>                 # PersistentVolume name
+  labels:                         # Labels for selection
+    <key>: <value>
+
+spec:
+  capacity:
+    storage: <size>               # Total storage capacity
+
+  volumeMode: Filesystem          # Filesystem or Block
+
+  accessModes:                    # Supported access modes
+    - <access-mode>
+
+  persistentVolumeReclaimPolicy: Retain  # Behavior after claim deletion
+
+  storageClassName: <storage-class>      # Storage class name
+
+  <volume-source>:                # Actual storage backend
+    <configuration>: <value>
+#
+#
+#
+#kubectl apply -f pv.yaml
+#kubectl get pv
+#kubectl describe pv <pv-name>
+#kubectl get pv <pv-name> -o yaml
+#kubectl delete pv <pv-name>
+
