@@ -1,0 +1,62 @@
+#A DaemonSet is a Kubernetes workload resource that ensures a copy of a particular Pod runs on each eligible node in a cluster.
+#When a new eligible node joins the cluster, the DaemonSet automatically creates its Pod on that node.
+#Common use cases:Log collection agents, Monitoring agents, Node-level security agents, Network plugins, Storage and node management agents
+#
+#
+#
+
+apiVersion: apps/v1                 # DaemonSet API version
+kind: DaemonSet                     # Resource type
+
+metadata:
+  name: <daemonset-name>            # DaemonSet name
+  namespace: <namespace>            # Namespace
+
+spec:
+  selector:
+    matchLabels:                    # Must match Pod template labels
+      <key>: <value>
+
+  updateStrategy:
+    type: RollingUpdate             # RollingUpdate or OnDelete
+
+  minReadySeconds: <seconds>        # Time Pod must stay ready
+
+  template:                         # Pod template
+    metadata:
+      labels:
+        <key>: <value>              # Labels matched by selector
+
+    spec:
+      nodeSelector:                 # Restrict eligible nodes
+        <node-label>: <value>
+
+      tolerations:                  # Allow scheduling on tainted nodes
+        - key: <taint-key>
+          operator: <operator>
+          effect: <effect>
+
+      containers:
+        - name: <container-name>    # Container name
+          image: <image>:<tag>      # Container image
+
+          ports:
+            - containerPort: <port> # Container port
+
+          resources:
+            requests:               # Minimum requested resources
+              cpu: <cpu>
+              memory: <memory>
+            limits:                 # Maximum allowed resources
+              cpu: <cpu>
+              memory: <memory>
+#
+#
+#
+#kubectl get ds
+#kubectl describe ds <daemonset-name>
+#kubectl get nodes
+#kubectl get pods -o wide
+#kubectl describe pod <pod-name>
+#kubectl logs <pod-name>
+#kubectl get events --sort-by=.metadata.creationTimestamp
