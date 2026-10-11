@@ -1,0 +1,37 @@
+#A kubeconfig is a configuration file used by kubectl to connect to a Kubernetes cluster and authenticate as a particular user or identity.
+#It tells kubectl:
+#Cluster: Which Kubernetes API server to connect to.
+#User: Which credentials or authentication method to use.
+#Context: Which cluster, user, and default namespace to use together.
+#
+#
+#
+apiVersion: v1                     # Configuration API version
+kind: Config                        # Kubeconfig object type
+
+clusters:                           # Kubernetes clusters
+  - name: <cluster-name>            # Cluster identifier
+    cluster:
+      server: <api-server-url>      # Kubernetes API endpoint
+      certificate-authority-data: <base64-ca> # CA certificate
+
+users:                              # Authentication identities
+  - name: <user-name>               # User identifier
+    user:
+      token: <access-token>         # Example authentication method
+
+contexts:                           # Cluster-user combinations
+  - name: <context-name>            # Context identifier
+    context:
+      cluster: <cluster-name>       # Cluster to use
+      user: <user-name>             # Identity to use
+      namespace: <namespace>        # Default namespace
+
+current-context: <context-name>     # Currently selected context
+#
+#
+#
+#kubectl config current-context
+#kubectl config get-contexts
+#kubectl cluster-info
+#kubectl get nodes
