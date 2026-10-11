@@ -1,0 +1,28 @@
+#A ConfigMap is used to store non-sensitive configuration data separately from application code.
+#Instead of hardcoding values inside your application or YAML files, you store them in a ConfigMap and inject them into Pods.
+#Examples:Application settings, Environment variables, URLs, Port numbers, Feature flags, Configuration files
+#
+#
+#
+apiVersion: v1                    # API version
+kind: ConfigMap                   # Resource type
+
+metadata:
+  name: <configmap-name>          # ConfigMap name
+  namespace: <namespace>          # Namespace
+
+data:                             # Key-value configuration data
+
+  <key1>: <value1>
+
+  <key2>: <value2>
+
+  <key3>: <value3>
+#
+#
+#
+#kubectl get cm
+#kubectl describe cm <configmap-name>
+#kubectl get pods
+#kubectl describe pod <pod-name>
+#kubectl exec -it <pod-name> -- env
