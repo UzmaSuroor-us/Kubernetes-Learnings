@@ -1,0 +1,73 @@
+#A CronJob is a Kubernetes resource that runs Jobs automatically on a scheduled basis.
+#It is useful when you want to execute tasks repeatedly at specific times or intervals.
+#Common use cases:Database backups, Scheduled reports, Log cleanup, Periodic data processing, Automated maintenance tasks
+#
+#
+#
+
+apiVersion: batch/v1                  # CronJob API version
+kind: CronJob                         # Resource type
+
+metadata:
+  name: <cronjob-name>                # CronJob name
+  namespace: <namespace>              # Namespace
+
+spec:
+  schedule: "<cron-expression>"       # When the Job runs
+
+  timeZone: "<timezone>"              # Optional timezone
+
+  concurrencyPolicy: Allow            # Allow, Forbid, or Replace
+
+  startingDeadlineSeconds: <seconds>  # Allowed start delay
+
+  suspend: false                      # Pause future scheduled Jobs
+
+  successfulJobsHistoryLimit: <number> # Completed Jobs to retain
+  failedJobsHistoryLimit: <number>     # Failed Jobs to retain
+
+  jobTemplate:                        # Template for each Job
+    spec:
+      completions: <number>           # Successful completions needed
+      parallelism: <number>           # Concurrent Pods
+      backoffLimit: <number>          # Retry limit
+
+      template:                       # Pod template
+        spec:
+          restartPolicy: Never        # Never or OnFailure
+
+          containers:
+            - name: <container-name>  # Container name
+              image: <image>:<tag>    # Container image
+
+              command:                # Optional command
+                - <command>
+
+              args:                   # Optional arguments
+                - <argument>
+
+              resources:
+                requests:             # Minimum resources
+                  cpu: <cpu>
+                  memory: <memory>
+                limits:               # Maximum resources
+                  cpu: <cpu>
+                  memory: <memory>
+#
+#
+#
+#kubectl apply -f cronjob.yaml
+#kubectl get cronjobs
+#kubectl get cj
+#kubectl get cronjobs -A
+#kubectl describe cronjob <cronjob-name>
+#kubectl get cronjob <cronjob-name> -o yaml
+#kubectl get jobs
+#kubectl logs job/<job-name>
+#kubectl patch cronjob <cronjob-name> \
+  -p '{"spec":{"suspend":true}}
+#kubectl patch cronjob <cronjob-name> \
+  -p '{"spec":{"suspend":false}}'
+#kubectl create job <manual-job-name> \
+  --from=cronjob/<cronjob-name>
+#kubectl delete cronjob <cronjob-name>
