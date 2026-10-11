@@ -1,0 +1,69 @@
+#A StatefulSet is a Kubernetes workload resource used to manage applications that require a stable identity, persistent storage, or predictable Pod ordering.
+#It is commonly used for:Databases, Distributed systems, Kafka clusters, Stateful applications such as Redis deployments that need stable identities
+#Unlike a Deployment, a StatefulSet gives each Pod a stable name and identity.
+#
+#
+#
+
+apiVersion: apps/v1                  # StatefulSet API version
+kind: StatefulSet                    # Resource type
+
+metadata:
+  name: <statefulset-name>           # StatefulSet name
+  namespace: <namespace>             # Namespace
+
+spec:
+  serviceName: <headless-service>    # Governing Service name
+
+  replicas: <number>                 # Desired Pod count
+
+  podManagementPolicy: OrderedReady  # OrderedReady or Parallel
+
+  selector:
+    matchLabels:                     # Must match template labels
+      <key>: <value>
+
+  updateStrategy:
+    type: RollingUpdate              # RollingUpdate or OnDelete
+
+  template:                          # Pod template
+    metadata:
+      labels:
+        <key>: <value>               # Must match selector
+
+    spec:
+      containers:
+        - name: <container-name>     # Container name
+          image: <image>:<tag>       # Container image
+
+          ports:
+            - containerPort: <port>  # Container port
+
+          volumeMounts:
+            - name: <volume-name>    # Claim template volume name
+              mountPath: <path>      # Mount location
+
+  volumeClaimTemplates:              # Creates a PVC per Pod
+    - metadata:
+        name: <volume-name>          # PVC template name
+
+      spec:
+        accessModes:
+          - <access-mode>            # Required access mode
+
+        resources:
+          requests:
+            storage: <size>          # Requested storage
+
+        storageClassName: <class-name> # StorageClass
+#
+#
+#
+#kubectl get sts
+#kubectl describe sts <statefulset-name>
+#kubectl get pods -o wide
+#kubectl get pvc
+#kubectl get svc
+#kubectl describe pod <pod-name>
+#kubectl logs <pod-name>
+#kubectl get events --sort-by=.metadata.creationTimestamp
