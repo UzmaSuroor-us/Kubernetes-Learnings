@@ -1,0 +1,62 @@
+#A Job is a Kubernetes workload resource that runs a task until it completes successfully.
+#Unlike a Deployment, which keeps application Pods running, a Job is designed for finite tasks that start, do some work, and finish.
+#Common use cases: Database migrations,Data processing, Backup scripts, Batch processing, One-time maintenance tasks
+#
+#
+#
+
+apiVersion: batch/v1                 # Job API version
+kind: Job                            # Resource type
+
+metadata:
+  name: <job-name>                   # Job name
+  namespace: <namespace>             # Namespace
+
+spec:
+  completions: <number>              # Successful completions required
+  parallelism: <number>              # Pods allowed to run concurrently
+  backoffLimit: <number>             # Retries before Job failure
+
+  activeDeadlineSeconds: <seconds>   # Maximum Job runtime
+
+  ttlSecondsAfterFinished: <seconds> # Optional cleanup after completion
+
+  template:                          # Pod template
+    metadata:
+      labels:
+        <key>: <value>               # Pod labels
+
+    spec:
+      restartPolicy: Never            # Never or OnFailure
+
+      containers:
+        - name: <container-name>     # Container name
+          image: <image>:<tag>       # Container image
+
+          command:                   # Optional command override
+            - <command>
+
+          args:                      # Optional command arguments
+            - <argument>
+
+          resources:
+            requests:                # Minimum resource requests
+              cpu: <cpu>
+              memory: <memory>
+            limits:                  # Maximum resource limits
+              cpu: <cpu>
+              memory: <memory>
+#
+#
+#
+#kubectl apply -f job.yaml
+#kubectl get jobs
+#kubectl get jobs -A
+#kubectl describe job <job-name>
+#kubectl get job <job-name> -o yaml
+#kubectl get pods
+#kubectl get jobs -w
+#kubectl logs job/<job-name>
+#kubectl logs <pod-name>
+#kubectl delete job <job-name>
+#kubectl create job <job-name> --image=<image>
