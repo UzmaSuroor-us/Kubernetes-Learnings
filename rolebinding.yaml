@@ -1,0 +1,18 @@
+#Grants the permissions defined by a Role to a user, group, or ServiceAccount.
+
+apiVersion: rbac.authorization.k8s.io/v1  # RBAC API version
+kind: RoleBinding                       # Grants permissions in a namespace
+
+metadata:
+  name: <binding-name>                   # Binding name
+  namespace: <namespace>                 # Namespace of the grant
+
+subjects:                                # Who receives permission
+  - kind: ServiceAccount                 # User, Group, or ServiceAccount
+    name: <service-account-name>         # Subject name
+    namespace: <subject-namespace>       # Subject's namespace
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io    # RBAC API group
+  kind: Role                             # Role or ClusterRole
+  name: <role-name>                      # Existing role to grant
