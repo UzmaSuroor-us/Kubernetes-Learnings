@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1  # RBAC API version
+kind: Role                               # Namespace-scoped permissions
+
+metadata:
+  name: <role-name>                      # Role name
+  namespace: <namespace>                 # Namespace for permissions
+
+rules:
+  - apiGroups: [""]                       # Core API group
+    resources: ["pods"]                  # Resources to access
+    verbs: ["get", "list", "watch"]      # Allowed actions
