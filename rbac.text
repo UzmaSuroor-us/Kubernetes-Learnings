@@ -1,9 +1,33 @@
 RBAC (Role-Based Access Control) is a Kubernetes authorization mechanism that controls who can perform which actions on which resources.
 For example: A developer can view Pods but cannot delete them, A DevOps engineer can create and update Deployments, A cluster administrator can manage resources across the cluster.
 RBAC follows the principle of least privilege: give users and applications only the permissions they need.
-Four main RBAC resources
+
+Four main RBAC resources:
 Resource	Purpose	Scope
 Role: Defines permissions	One namespace (role.yaml)
-RoleBinding: Grants a Role or ClusterRole to subjects	One namespace
-ClusterRole: Defines cluster-wide or reusable permissions	Cluster-level definition
-ClusterRoleBinding: Grants a ClusterRole across the cluster	Cluster-wide grant
+RoleBinding: Grants a Role or ClusterRole to subjects	One namespace (rolebinding.yaml)
+ClusterRole: Defines cluster-wide or reusable permissions	Cluster-level definition (clusterrole.yaml)
+ClusterRoleBinding: Grants a ClusterRole across the cluster	Cluster-wide grant (clusterrolebinding.yaml)
+
+Commands:
+kubectl apply -f role.yaml
+kubectl apply -f rolebinding.yaml
+kubectl apply -f clusterrole.yaml
+kubectl apply -f clusterrolebinding.yaml
+kubectl get roles -n <namespace>
+kubectl get roles -A
+kubectl get rolebindings -n <namespace>
+kubectl get rolebindings -A
+kubectl get clusterroles
+kubectl get clusterrolebindings
+kubectl describe role <role-name> -n <namespace>
+kubectl describe rolebinding <binding-name> -n <namespace>
+kubectl auth can-i get pods -n <namespace>
+kubectl auth can-i delete pods -n <namespace>
+kubectl auth can-i list pods \
+  --as=<username> -n <namespace>
+kubectl auth can-i --list -n <namespace>
+kubectl delete role <role-name> -n <namespace>
+kubectl delete rolebinding <binding-name> -n <namespace>
+kubectl delete clusterrole <clusterrole-name>
+kubectl delete clusterrolebinding <binding-name>
