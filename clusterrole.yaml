@@ -1,0 +1,11 @@
+#Defines permissions that can be reused across namespaces or granted at cluster scope.
+apiVersion: rbac.authorization.k8s.io/v1  # RBAC API version
+kind: ClusterRole                        # Cluster-scoped role definition
+
+metadata:
+  name: <clusterrole-name>               # ClusterRole name
+
+rules:
+  - apiGroups: [""]                       # Core API group
+    resources: ["nodes"]                 # Cluster-scoped resource
+    verbs: ["get", "list", "watch"]      # Allowed actions
