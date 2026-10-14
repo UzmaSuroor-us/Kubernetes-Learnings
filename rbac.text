@@ -3,7 +3,7 @@ For example: A developer can view Pods but cannot delete them, A DevOps engineer
 RBAC follows the principle of least privilege: give users and applications only the permissions they need.
 Four main RBAC resources
 Resource	Purpose	Scope
-Role: Defines permissions	One namespace 
+Role: Defines permissions	One namespace (role.yaml)
 RoleBinding: Grants a Role or ClusterRole to subjects	One namespace
 ClusterRole: Defines cluster-wide or reusable permissions	Cluster-level definition
 ClusterRoleBinding: Grants a ClusterRole across the cluster	Cluster-wide grant
