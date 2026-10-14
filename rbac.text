@@ -1,0 +1,9 @@
+RBAC (Role-Based Access Control) is a Kubernetes authorization mechanism that controls who can perform which actions on which resources.
+For example: A developer can view Pods but cannot delete them, A DevOps engineer can create and update Deployments, A cluster administrator can manage resources across the cluster.
+RBAC follows the principle of least privilege: give users and applications only the permissions they need.
+Four main RBAC resources
+Resource	Purpose	Scope
+Role: Defines permissions	One namespace 
+RoleBinding: Grants a Role or ClusterRole to subjects	One namespace
+ClusterRole: Defines cluster-wide or reusable permissions	Cluster-level definition
+ClusterRoleBinding: Grants a ClusterRole across the cluster	Cluster-wide grant
