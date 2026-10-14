@@ -1,0 +1,16 @@
+#Grants a ClusterRole across the cluster.
+apiVersion: rbac.authorization.k8s.io/v1  # RBAC API version
+kind: ClusterRoleBinding                 # Cluster-wide grant
+
+metadata:
+  name: <binding-name>                   # Binding name
+
+subjects:
+  - kind: User                           # User, Group, or ServiceAccount
+    name: <user-name>                    # Authenticated identity
+    apiGroup: rbac.authorization.k8s.io  # Required for User/Group
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io    # RBAC API group
+  kind: ClusterRole                     # Referenced role type
+  name: <clusterrole-name>              # Existing ClusterRole
