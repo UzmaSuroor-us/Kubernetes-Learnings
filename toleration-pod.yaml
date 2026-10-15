@@ -1,0 +1,40 @@
+#Taints and tolerations control which Pods can be scheduled on which Nodes in a Kubernetes cluster.
+#Taint: Applied to a Node to repel Pods that do not tolerate the taint.
+#Toleration: Added to a Pod to allow it to be scheduled on a Node with a matching taint.
+#Taints repel; tolerations permit. A toleration does not guarantee that a Pod will run on that Node.
+#
+#
+#
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: payment-pod
+spec:
+  tolerations:
+    - key: "app"            # Must match the taint key
+      operator: "Equal"     # Match key and value
+      value: "payment"
+      effect: "NoSchedule"  # Must match the taint effect
+  containers:
+    - name: nginx
+      image: nginx:stable
+#
+#
+#
+#Three taint effects
+#NoSchedule - New Pods without a matching toleration will not be scheduled on the Node.
+#PreferNoSchedule - Kubernetes tries to avoid placing Pods without a matching toleration on the Node, but may still do so.
+#NoExecute - Pods without a matching toleration cannot remain on the Node; existing Pods may be evicted.
+#
+#
+#Commands
+#kubectl apply -f toleration-pod.yaml
+#kubectl get pods -o wide
+#kubectl describe pod payment-pod
+#kubectl get nodes
+#kubectl describe node worker-1
+#kubectl taint nodes worker-1 app=payment:NoSchedule
+#kubectl taint nodes worker-1 app=payment:NoSchedule-
+#kubectl describe pod payment-pod
+#kubectl get pods -o wide
