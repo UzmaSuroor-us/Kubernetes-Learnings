@@ -1,0 +1,23 @@
+# This example asks Kubernetes to place the Pod in the same zone as a Pod
+# labeled app=frontend. A matching Pod and correctly labeled Nodes must exist.
+
+pod_affinity_example:
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: backend-pod
+    labels:
+      app: backend
+  spec:
+    affinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: frontend
+            topologyKey: topology.kubernetes.io/zone # Same zone as matching Pod
+    containers:
+      - name: nginx
+        image: nginx:stable
+
+pod_affinity_note: "A required Pod-affinity rule can leave the Pod Pending if no matching Pod exists in a suitable topology domain."
