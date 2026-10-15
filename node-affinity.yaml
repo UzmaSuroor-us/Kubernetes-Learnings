@@ -1,0 +1,27 @@
+# Save this section as node-affinity.yaml.
+# Before applying, label at least one Node:
+# kubectl label nodes worker-1 disk=ssd
+
+node_affinity_example:
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: ssd-pod
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution: # Must match at scheduling time
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: disk
+                  operator: In
+                  values:
+                    - ssd
+    containers:
+      - name: nginx
+        image: nginx:stable
+
+node_affinity_notes:
+  requiredDuringSchedulingIgnoredDuringExecution: "A matching Node is required for scheduling. If none exists, the Pod remains Pending."
+  preferredDuringSchedulingIgnoredDuringExecution: "A matching Node is preferred, but Kubernetes can choose another suitable Node."
+  ignored_during_execution: "Changing Node labels later does not, by itself, evict an already-running Pod."
