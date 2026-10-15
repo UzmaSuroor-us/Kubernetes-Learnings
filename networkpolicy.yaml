@@ -1,0 +1,62 @@
+#A NetworkPolicy is a Kubernetes resource that controls network traffic entering and leaving Pods.
+#It helps you define which Pods can communicate with other Pods, namespaces, or external IP addresses.
+#Common use cases:
+#Allow frontend Pods to communicate with backend Pods.
+#Allow backend Pods to communicate with database Pods only.
+#Block unwanted incoming traffic.
+£Restrict outbound connections from sensitive workloads.
+#
+#
+#
+
+apiVersion: networking.k8s.io/v1  # NetworkPolicy API version
+kind: NetworkPolicy               # Resource type
+
+metadata:
+  name: <policy-name>             # Policy name
+  namespace: <namespace>          # Namespace where policy applies
+
+spec:
+  podSelector:                    # Select Pods protected by this policy
+    matchLabels:
+      <key>: <value>
+
+  policyTypes:                    # Traffic directions governed by policy
+    - Ingress
+    - Egress
+
+  ingress:                        # Rules for incoming traffic
+    - from:
+        - podSelector:
+            matchLabels:
+              <key>: <value>      # Allowed source Pods
+      ports:
+        - protocol: TCP
+          port: <port-number>     # Allowed destination port
+
+  egress:                         # Rules for outgoing traffic
+    - to:
+        - podSelector:
+            matchLabels:
+              <key>: <value>      # Allowed destination Pods
+      ports:
+        - protocol: TCP
+          port: <port-number>     # Allowed destination port
+#
+#
+#
+#kubectl apply -f networkpolicy.yaml
+#kubectl get networkpolicies
+#kubectl get netpol
+#kubectl get netpol -A
+#kubectl describe netpol <policy-name> -n <namespace>
+#kubectl get netpol <policy-name> -n <namespace> -o yaml
+#kubectl get pods --show-labels -n <namespace>
+#kubectl get namespaces --show-labels
+#kubectl delete netpol <policy-name> -n <namespace>
+#kubectl delete -f networkpolicy.yaml
+#kubectl get netpol -A
+#kubectl describe netpol <policy-name> -n <namespace>
+#kubectl get pods --show-labels -n <namespace>
+#kubectl get events -n <namespace> --sort-by=.metadata.creationTimestamp
+
