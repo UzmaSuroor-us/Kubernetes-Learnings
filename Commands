@@ -1,0 +1,824 @@
+----PODS----
+
+# List all pods in the current namespace
+kubectl get pods
+
+# List pods across all namespaces
+kubectl get pods -A
+
+# Create a pod directly from the command line
+kubectl run nginx --image=nginx
+
+# Describe a pod to inspect its status, events, and configuration
+kubectl describe pod nginx
+
+# View pod logs for troubleshooting
+kubectl logs nginx
+
+# Execute a command inside a running container
+kubectl exec -it nginx -- /bin/sh
+
+# Delete a pod
+kubectl delete pod nginx
+
+# Create a pod from a YAML manifest
+kubectl apply -f pod.yaml
+
+
+----DEPLOYMENTS----
+
+# Create a Deployment with three replicas
+kubectl create deployment nginx --image=nginx --replicas=3
+
+# List Deployments
+kubectl get deployments
+
+# Inspect Deployment configuration and events
+kubectl describe deployment nginx
+
+# Scale the Deployment to five replicas
+kubectl scale deployment nginx --replicas=5
+
+# Update the container image
+kubectl set image deployment/nginx nginx=nginx:alpine
+
+# Check rollout status
+kubectl rollout status deployment/nginx
+
+# View Deployment rollout history
+kubectl rollout history deployment/nginx
+
+# Undo the most recent rollout
+kubectl rollout undo deployment/nginx
+
+# Apply a Deployment manifest
+kubectl apply -f deployment.yaml
+
+# Delete the Deployment
+kubectl delete deployment nginx
+
+
+----REPLICASETS----
+
+# List ReplicaSets
+kubectl get replicasets
+
+# View ReplicaSets across all namespaces
+kubectl get rs -A
+
+# Inspect a ReplicaSet and its events
+kubectl describe rs <replicaset-name>
+
+# View the pods managed by a ReplicaSet
+kubectl get pods -l app=nginx
+
+# Scale a ReplicaSet directly
+kubectl scale rs <replicaset-name> --replicas=4
+
+# Create or update a ReplicaSet from YAML
+kubectl apply -f replicaset.yaml
+
+# Delete a ReplicaSet
+kubectl delete rs <replicaset-name>
+
+
+----SERVICES----
+
+# List Services
+kubectl get services
+
+# Create a ClusterIP Service for a Deployment
+kubectl expose deployment nginx --port=80 --target-port=80
+
+# Create a NodePort Service
+kubectl expose deployment nginx --type=NodePort --port=80
+
+# Inspect a Service
+kubectl describe service nginx
+
+# List endpoints associated with Services
+kubectl get endpoints
+
+# List EndpointSlices (modern endpoint discovery)
+kubectl get endpointslices
+
+# Forward local port 8080 to the Service's port 80
+kubectl port-forward service/nginx 8080:80
+
+# Apply a Service manifest
+kubectl apply -f service.yaml
+
+# Delete a Service
+kubectl delete service nginx
+
+
+----INGRESS----
+
+# List Ingress resources
+kubectl get ingress
+
+# Inspect an Ingress resource
+kubectl describe ingress <ingress-name>
+
+# List available IngressClasses
+kubectl get ingressclass
+
+# Create or update an Ingress from YAML
+kubectl apply -f ingress.yaml
+
+# Check Ingress controller pods in its namespace
+kubectl get pods -n ingress-nginx
+
+# Inspect Ingress controller logs
+kubectl logs -n ingress-nginx deployment/ingress-nginx-controller
+
+# Delete an Ingress resource
+kubectl delete ingress <ingress-name>
+
+
+----NAMESPACES----
+
+# List all namespaces
+kubectl get namespaces
+
+# Create a namespace
+kubectl create namespace development
+
+# List pods in a specific namespace
+kubectl get pods -n development
+
+# Apply a manifest in a specific namespace
+kubectl apply -f deployment.yaml -n development
+
+# Set the default namespace for the current context
+kubectl config set-context --current --namespace=development
+
+# Describe a namespace
+kubectl describe namespace development
+
+# Delete a namespace and its namespaced resources
+kubectl delete namespace development
+
+
+----CONFIGMAPS----
+
+# Create a ConfigMap from literal key-value pairs
+kubectl create configmap app-config \
+  --from-literal=APP_MODE=development
+
+# Create a ConfigMap from a file
+kubectl create configmap app-settings \
+  --from-file=app.properties
+
+# List ConfigMaps
+kubectl get configmaps
+
+# Display ConfigMap details
+kubectl describe configmap app-config
+
+# Print ConfigMap YAML
+kubectl get configmap app-config -o yaml
+
+# Apply a ConfigMap manifest
+kubectl apply -f configmap.yaml
+
+# Delete a ConfigMap
+kubectl delete configmap app-config
+
+
+----SECRETS----
+
+# Create a Secret from a literal value
+kubectl create secret generic app-secret \
+  --from-literal=username=admin
+
+# Create a Secret from a file
+kubectl create secret generic tls-files \
+  --from-file=server.crt \
+  --from-file=server.key
+
+# List Secrets
+kubectl get secrets
+
+# Inspect Secret metadata without printing its values
+kubectl describe secret app-secret
+
+# Apply a Secret manifest
+kubectl apply -f secret.yaml
+
+# Delete a Secret
+kubectl delete secret app-secret
+
+
+----PERSISTENT-VOLUME----
+
+# List Persistent Volumes across the cluster
+kubectl get pv
+
+# Inspect a Persistent Volume
+kubectl describe pv <pv-name>
+
+# View PV configuration in YAML
+kubectl get pv <pv-name> -o yaml
+
+# Apply a Persistent Volume manifest
+kubectl apply -f pv.yaml
+
+# Delete a Persistent Volume (check its reclaim policy first)
+kubectl delete pv <pv-name>
+
+
+----PERSISTENT-VOLUME-CLAIM----
+
+# List PVCs in the current namespace
+kubectl get pvc
+
+# List PVCs across namespaces
+kubectl get pvc -A
+
+# Inspect a PVC and diagnose Pending status
+kubectl describe pvc <pvc-name>
+
+# Inspect storage binding and capacity
+kubectl get pvc <pvc-name> -o yaml
+
+# Create or update a PVC
+kubectl apply -f pvc.yaml
+
+# Delete a PVC (check the impact on its storage first)
+kubectl delete pvc <pvc-name>
+
+
+----STATEFULSETS----
+
+# Create a StatefulSet from a manifest
+kubectl apply -f statefulset.yaml
+
+# List StatefulSets
+kubectl get statefulsets
+
+# Inspect StatefulSet configuration
+kubectl describe statefulset <name>
+
+# Scale a StatefulSet
+kubectl scale statefulset <name> --replicas=3
+
+# Check the rollout
+kubectl rollout status statefulset/<name>
+
+# View pods created by the StatefulSet
+kubectl get pods -l app=database
+
+# Delete a StatefulSet
+kubectl delete statefulset <name>
+
+
+----DAEMONASETS----
+
+# Create or update a DaemonSet
+kubectl apply -f daemonset.yaml
+
+# List DaemonSets
+kubectl get daemonsets
+
+# Inspect a DaemonSet
+kubectl describe daemonset <name>
+
+# View pods managed by the DaemonSet
+kubectl get pods -l app=node-agent -o wide
+
+# Check DaemonSet rollout status
+kubectl rollout status daemonset/<name>
+
+# Update the DaemonSet image
+kubectl set image daemonset/<name> <container-name>=<image>
+
+# Undo the most recent rollout
+kubectl rollout undo daemonset/<name>
+
+# Delete the DaemonSet
+kubectl delete daemonset <name>
+
+
+----JOBS----
+
+# Create a Job that runs a one-time task
+kubectl create job hello --image=busybox:1.36 -- echo "Hello Kubernetes"
+
+# List Jobs
+kubectl get jobs
+
+# Inspect Job status and events
+kubectl describe job hello
+
+# View logs from the Job's pod
+kubectl logs job/hello
+
+# Create or update a Job from YAML
+kubectl apply -f job.yaml
+
+# Delete a Job and its dependent pods
+kubectl delete job hello
+
+
+----CRONJOBS----
+
+# Create a CronJob that runs every five minutes
+kubectl create cronjob hello \
+  --image=busybox:1.36 \
+  --schedule="*/5 * * * *" \
+  -- echo "Scheduled task"
+
+# List CronJobs
+kubectl get cronjobs
+
+# Inspect a CronJob
+kubectl describe cronjob hello
+
+# Trigger an immediate run using a separate Job
+kubectl create job manual-run --from=cronjob/hello
+
+# Suspend future scheduled executions
+kubectl patch cronjob hello -p '{"spec":{"suspend":true}}'
+
+# Resume scheduled executions
+kubectl patch cronjob hello -p '{"spec":{"suspend":false}}'
+
+# Apply a CronJob manifest
+kubectl apply -f cronjob.yaml
+
+# Delete a CronJob
+kubectl delete cronjob hello
+
+
+----HELMCHARTS----
+
+# Check the installed Helm version
+helm version
+
+# Add a chart repository
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+# Refresh repository chart metadata
+helm repo update
+
+# Search charts in configured repositories
+helm search repo nginx
+
+# Install a chart with a release name
+helm install my-nginx bitnami/nginx
+
+# List Helm releases in a namespace
+helm list -n default
+
+# Inspect values supported by a chart
+helm show values bitnami/nginx
+
+# Upgrade a release using custom values
+helm upgrade my-nginx bitnami/nginx -f values.yaml
+
+# Roll back to the previous release revision
+helm rollback my-nginx 0
+
+# Uninstall a release
+helm uninstall my-nginx
+
+
+----KUBECONFIG----
+
+# Display the current Kubernetes context
+kubectl config current-context
+
+# List available contexts
+kubectl config get-contexts
+
+# Switch to a different context
+kubectl config use-context <context-name>
+
+# Display cluster and user configuration
+kubectl config view
+
+# Display configuration including sensitive authentication data
+# Avoid sharing or publishing this output
+kubectl config view --raw
+
+# Set the default namespace for the current context
+kubectl config set-context --current --namespace=development
+
+# List configured clusters
+kubectl config get-clusters
+
+# Test connectivity and authorization
+kubectl cluster-info
+kubectl auth can-i get pods
+
+
+----RBAC----
+
+# List Roles in the current namespace
+kubectl get roles
+
+# List ClusterRoles
+kubectl get clusterroles
+
+# List RoleBindings
+kubectl get rolebindings
+
+# List ClusterRoleBindings
+kubectl get clusterrolebindings
+
+# Inspect a Role
+kubectl describe role <role-name>
+
+# Create a namespace-scoped Role
+kubectl create role pod-reader \
+  --verb=get,list,watch \
+  --resource=pods \
+  -n development
+
+# Bind the Role to a user
+kubectl create rolebinding read-pods \
+  --role=pod-reader \
+  --user=<username> \
+  -n development
+
+# Test the current identity's permissions
+kubectl auth can-i list pods -n development
+
+# Apply RBAC manifests
+kubectl apply -f rbac.yaml
+
+
+----SERVICE-ACCOUNTS----
+
+# List ServiceAccounts
+kubectl get serviceaccounts
+
+# Create a ServiceAccount
+kubectl create serviceaccount app-service-account
+
+# Inspect a ServiceAccount
+kubectl describe serviceaccount app-service-account
+
+# Create a RoleBinding for the ServiceAccount
+kubectl create rolebinding app-pod-reader \
+  --role=pod-reader \
+  --serviceaccount=default:app-service-account
+
+# Check permissions for the ServiceAccount identity
+kubectl auth can-i list pods \
+  --as=system:serviceaccount:default:app-service-account
+
+# Apply a ServiceAccount manifest
+kubectl apply -f serviceaccount.yaml
+
+
+----NETWORK-POLICIES----
+
+# List NetworkPolicies
+kubectl get networkpolicies
+
+# Inspect a NetworkPolicy
+kubectl describe networkpolicy <policy-name>
+
+# View NetworkPolicy YAML
+kubectl get networkpolicy <policy-name> -o yaml
+
+# Create or update a policy
+kubectl apply -f network-policy.yaml
+
+# Delete a NetworkPolicy
+kubectl delete networkpolicy <policy-name>
+
+
+----STORAGECLASSES----
+
+# List available StorageClasses
+kubectl get storageclass
+
+# Inspect a StorageClass
+kubectl describe storageclass <storage-class-name>
+
+# View StorageClass configuration
+kubectl get storageclass <storage-class-name> -o yaml
+
+# Set the default StorageClass annotation
+kubectl patch storageclass <storage-class-name> \
+  -p '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+# Create or update a StorageClass
+kubectl apply -f storageclass.yaml
+
+
+----TAINTSANDTOLERATIONS----
+
+# List cluster nodes
+kubectl get nodes
+
+# Add a NoSchedule taint to a node
+kubectl taint nodes <node-name> dedicated=devops:NoSchedule
+
+# Add a PreferNoSchedule taint
+kubectl taint nodes <node-name> workload=batch:PreferNoSchedule
+
+# Add a NoExecute taint
+kubectl taint nodes <node-name> maintenance=true:NoExecute
+
+# Inspect a node's taints and other details
+kubectl describe node <node-name>
+
+# Remove a specific taint using the trailing minus sign
+kubectl taint nodes <node-name> dedicated=devops:NoSchedule-
+
+# Apply a Pod manifest containing tolerations
+kubectl apply -f pod-toleration.yaml
+
+
+----AFFINITY-AND-ANTI-AFFINITY----
+
+# Inspect nodes and their labels
+kubectl get nodes --show-labels
+
+# Add a label to a node
+kubectl label node <node-name> workload=devops
+
+# Display pods and the nodes where they run
+kubectl get pods -o wide
+
+# Inspect pod scheduling decisions and events
+kubectl describe pod <pod-name>
+
+# Apply a manifest with node affinity or pod affinity rules
+kubectl apply -f affinity.yaml
+
+# Remove a node label
+kubectl label node <node-name> workload-
+
+
+----HORIZONTAL-POD-AUTOSCALER----
+
+# Create an HPA targeting CPU utilization
+kubectl autoscale deployment nginx \
+  --min=2 --max=10 --cpu-percent=70
+
+# List Horizontal Pod Autoscalers
+kubectl get hpa
+
+# Inspect HPA configuration and events
+kubectl describe hpa nginx
+
+# View current and desired replica counts
+kubectl get hpa nginx -o wide
+
+# Apply an HPA manifest
+kubectl apply -f hpa.yaml
+
+# Delete an HPA
+kubectl delete hpa nginx
+
+
+----VERTICAL-POD-AUTOSCALER----
+
+# List VPA resources (requires VPA installation and CRDs)
+kubectl get vpa
+
+# Inspect VPA recommendations and status
+kubectl describe vpa <vpa-name>
+
+# View detailed VPA configuration
+kubectl get vpa <vpa-name> -o yaml
+
+# Apply a VPA manifest
+kubectl apply -f vpa.yaml
+
+# Delete a VPA
+kubectl delete vpa <vpa-name>
+
+
+----CUSTOM-RESOURCES-DEFINITIONS----
+
+# List all installed CRDs
+kubectl get crds
+
+# Inspect a CRD
+kubectl describe crd <crd-name>
+
+# Print the CRD schema
+kubectl get crd <crd-name> -o yaml
+
+# Apply a CRD definition
+kubectl apply -f crd.yaml
+
+# List instances of a custom resource
+kubectl get <custom-resource-kind>
+
+# Delete a CRD (this can remove access to all its custom resources)
+kubectl delete crd <crd-name>
+
+
+----OPERATORS----
+
+# Search for Operator-related resources installed in the cluster
+kubectl get deployments -A
+
+# List CRDs that an Operator may have installed
+kubectl get crds
+
+# Inspect an Operator's deployment
+kubectl describe deployment <operator-name> -n <namespace>
+
+# View Operator logs
+kubectl logs deployment/<operator-name> -n <namespace>
+
+# Follow Operator logs continuously
+kubectl logs -f deployment/<operator-name> -n <namespace>
+
+# Apply a custom resource managed by an Operator
+kubectl apply -f custom-resource.yaml
+
+
+----ADMISSION-CONTROLLERS----
+
+# Inspect API server readiness
+kubectl get --raw='/readyz?verbose'
+
+# List webhook configurations
+kubectl get validatingwebhookconfigurations
+
+# List mutating webhook configurations
+kubectl get mutatingwebhookconfigurations
+
+# Inspect a validating webhook
+kubectl describe validatingwebhookconfiguration <webhook-name>
+
+# Inspect a mutating webhook
+kubectl describe mutatingwebhookconfiguration <webhook-name>
+
+# Check a resource using server-side dry-run
+kubectl apply --dry-run=server -f deployment.yaml
+
+# Apply a resource normally after validating it
+kubectl apply -f deployment.yaml
+
+
+----etcd----
+
+# Inspect etcd-related pods in a kubeadm control-plane cluster
+kubectl get pods -n kube-system -l component=etcd
+
+# Inspect the etcd static pod
+kubectl describe pod -n kube-system <etcd-pod-name>
+
+# View etcd logs
+kubectl logs -n kube-system <etcd-pod-name>
+
+# Inspect etcd configuration and health-check arguments
+kubectl get pod -n kube-system <etcd-pod-name> -o yaml
+
+# List cluster events that may reveal storage or API problems
+kubectl get events -A --sort-by=.metadata.creationTimestamp
+
+
+----CONTROL-PLANE----
+
+# Inspect control-plane components in kube-system
+kubectl get pods -n kube-system -o wide
+
+# Inspect the API server
+kubectl get pods -n kube-system -l component=kube-apiserver
+
+# Inspect the scheduler
+kubectl get pods -n kube-system -l component=kube-scheduler
+
+# Inspect the controller manager
+kubectl get pods -n kube-system -l component=kube-controller-manager
+
+# Check API server health endpoints
+kubectl get --raw='/livez'
+kubectl get --raw='/readyz'
+
+# View recent cluster events
+kubectl get events -A --sort-by=.metadata.creationTimestamp
+
+
+----KUBELET----
+
+# List nodes and their readiness status
+kubectl get nodes
+
+# Inspect a node's conditions and kubelet-related events
+kubectl describe node <node-name>
+
+# View pods assigned to a particular node
+kubectl get pods -A -o wide --field-selector spec.nodeName=<node-name>
+
+# Check API server connectivity and authorization for kubelet access
+kubectl get --raw='/readyz'
+
+# On a Linux node, inspect kubelet service status
+sudo systemctl status kubelet
+
+# On a Linux node, inspect recent kubelet logs
+sudo journalctl -u kubelet -n 100 --no-pager
+
+# On a Linux node, follow kubelet logs
+sudo journalctl -u kubelet -f
+
+
+----KUBE-PROXY----
+
+# Find kube-proxy pods, if deployed as a DaemonSet
+kubectl get pods -n kube-system -l k8s-app=kube-proxy
+
+# Inspect the kube-proxy DaemonSet
+kubectl get daemonset kube-proxy -n kube-system
+
+# Describe the DaemonSet
+kubectl describe daemonset kube-proxy -n kube-system
+
+# View kube-proxy logs
+kubectl logs -n kube-system -l k8s-app=kube-proxy --tail=100
+
+# Follow kube-proxy logs
+kubectl logs -n kube-system -l k8s-app=kube-proxy -f
+
+# Inspect Services and their endpoints when troubleshooting connectivity
+kubectl get services,endpointslices -A
+
+
+----CONTAINER-RUNTIME----
+
+# Display the container runtime reported by each node
+kubectl get nodes \
+  -o custom-columns=NAME:.metadata.name,OS:.status.nodeInfo.operatingSystem,RUNTIME:.status.nodeInfo.containerRuntimeVersion
+
+# Inspect node runtime details and related events
+kubectl describe node <node-name>
+
+# On a Linux node using systemd, check containerd status
+sudo systemctl status containerd
+
+# On a Linux node, view recent containerd logs
+sudo journalctl -u containerd -n 100 --no-pager
+
+# List containers using crictl on a node where it is configured
+sudo crictl ps
+
+# List images available to the runtime using crictl
+sudo crictl images
+
+# Inspect a container's runtime details
+sudo crictl inspect <container-id>
+
+
+----CONTAINER-NETWORK-INTERFACE----
+
+# Inspect nodes for network-related readiness issues
+kubectl get nodes
+
+# Inspect networking-related pods
+kubectl get pods -n kube-system -o wide
+
+# List cluster Services and their endpoints
+kubectl get services,endpointslices -A
+
+# Inspect a pod's network configuration and events
+kubectl describe pod <pod-name>
+
+# Inspect logs from a known CNI plugin DaemonSet
+kubectl logs -n kube-system daemonset/<cni-daemonset-name> --tail=100
+
+# On a Linux node, inspect CNI configuration files
+sudo ls -l /etc/cni/net.d/
+
+# On a Linux node, inspect installed CNI plugin binaries
+sudo ls -l /opt/cni/bin/
+
+
+----CONTAINER-STORAGE-INTERFACE----
+
+# List CSI drivers registered with Kubernetes
+kubectl get csidrivers
+
+# Inspect a CSI driver
+kubectl describe csidriver <driver-name>
+
+# List CSI driver pods
+kubectl get pods -A | grep -i csi
+
+# Inspect available storage
+kubectl get storageclass,pv,pvc -A
+
+# Inspect a PVC that is failing to bind or mount
+kubectl describe pvc <pvc-name>
+
+# Inspect the pod using the PVC
+kubectl describe pod <pod-name>
+
+# Inspect logs from a known CSI controller deployment
+kubectl logs -n <namespace> deployment/<csi-controller-name> --all-containers=true --tail=100
+
+# Apply a storage-related manifest
+kubectl apply -f storage.yaml
+
+
