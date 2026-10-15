@@ -1,0 +1,42 @@
+#A StorageClass in Kubernetes defines what type of storage should be provisioned for applications. It allows Kubernetes to create storage dynamically when a PersistentVolumeClaim (PVC) requests it.
+#Why do we need a StorageClass?
+#Without dynamic provisioning, you may need to create a PersistentVolume (PV) manually before an application can use storage.
+#With a StorageClass, Kubernetes can automatically provision suitable storage when a PVC is created, provided a compatible storage provisioner is configured.
+#
+#
+#
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard-storage  # StorageClass name
+provisioner: example.com/volume-provisioner  # Replace with a real provisioner
+reclaimPolicy: Delete  # Delete the PV when its claim is released
+volumeBindingMode: WaitForFirstConsumer  # Wait until a Pod uses the PVC
+allowVolumeExpansion: true  # Allow supported volumes to grow
+#
+#
+#
+#Important fields
+#provisioner - Plugin or driver that creates storage
+#reclaimPolicy - Controls what happens to the PV after the PVC is deleted
+#volumeBindingMode - Determines when storage is provisioned or bound
+#allowVolumeExpansion - Allows supported volumes to be expanded
+#parameters - Defines storage-specific options, such as disk type
+#Reclaim policies
+#Delete — the provisioned storage asset may be deleted when the claim is released.
+#Retain — the PV and underlying storage are retained for manual recovery or cleanup.
+#Be careful with Delete when storing important data.
+#Volume binding modes
+#Immediate — provision or bind storage as soon as the PVC is created.
+#WaitForFirstConsumer — delay provisioning or binding until a Pod using the PVC is scheduled. This can help with topology-aware storage.
+#
+#
+#
+# List StorageClasses
+#kubectl get storageclass
+#kubectl describe storageclass local-path
+#kubectl get storageclass local-path -o yaml
+#kubectl get storageclass
+#kubectl apply -f storageclass.yaml
+#kubectl delete -f storageclass.yaml
