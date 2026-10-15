@@ -1,0 +1,24 @@
+# This example avoids placing matching app=web Pods on the same Node.
+# For a multi-replica workload, use a Deployment and apply the rule to its
+# Pod template; replicas may remain Pending if there are too few eligible Nodes.
+
+pod_anti_affinity_example:
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: web-pod
+    labels:
+      app: web
+  spec:
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: web
+            topologyKey: kubernetes.io/hostname # Separate Nodes
+    containers:
+      - name: nginx
+        image: nginx:stable
+
+#
